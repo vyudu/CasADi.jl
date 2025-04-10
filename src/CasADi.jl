@@ -1,7 +1,7 @@
 __precompile__()
 module CasADi
 
-using PyCall
+using PythonCall
 
 import Base: convert, getproperty, hcat, length, promote_rule, show, size, vcat
 import Base: +, -, *, /, \, ^
@@ -21,11 +21,11 @@ include("utils.jl")
 
 ##################################################
 
-const casadi = PyNULL()
+const casadi = PythonCall.pynew()
 
 function __init__()
     ## Define casadi
-    copy!(casadi, pyimport_conda("casadi", "casadi", "conda-forge"))
+    PythonCallpycopy!(casadi, pyimport("casadi"))
 
     pytype_mapping(casadi.SX, SX)
     pytype_mapping(casadi.MX, MX)
