@@ -11,10 +11,7 @@ More information are available on the [official website](https://web.casadi.org)
 Although Julia has excellent libraries for optimization, they have not reached the maturity of CasADi for nonlinear optimization and optimal control yet.
 This library aims to give easy access to its powerful capabilities.
 
-Please note:
-1. This repo is unofficial, not maintained by the original CasADi authors, and not affiliated with the CasADi project.
-2. There is no plan to include interfaces to all of CasADi capabilities. It has grown out of my own research needs and I am sharing it in case other people find it useful. Since [PythonCall.jl](https://github.com/JuliaPy/PythonCall.jl) is used, any aspect of CasADi not implemented in this interface can be easily accessed directly via PythonCall.
-3. I am more than happy to accept contributions and discuss potential changes that could improve this package.
+Please note: This repo is unofficial, not maintained by the original CasADi authors, and not affiliated with the CasADi project.
 
 ## Example: Create NLP solver
 
