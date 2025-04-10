@@ -13,7 +13,7 @@ This library aims to give easy access to its powerful capabilities.
 
 Please note:
 1. This repo is unofficial, not maintained by the original CasADi authors, and not affiliated with the CasADi project.
-2. There is no plan to include interfaces to all of CasADi capabilities. It has grown out of my own research needs and I am sharing it in case other people find it useful. Since [PyCall.jl](https://github.com/JuliaPy/PyCall.jl) is used, any aspect of CasADi not implemented in this interface can be easily accessed directly via PyCall.
+2. There is no plan to include interfaces to all of CasADi capabilities. It has grown out of my own research needs and I am sharing it in case other people find it useful. Since [PythonCall.jl](https://github.com/JuliaPy/PythonCall.jl) is used, any aspect of CasADi not implemented in this interface can be easily accessed directly via PythonCall.
 3. I am more than happy to accept contributions and discuss potential changes that could improve this package.
 
 ## Example: Create NLP solver
