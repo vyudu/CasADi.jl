@@ -1,8 +1,8 @@
 # CasADi.jl
 
-| Status | Coverage |
-| :----: | :----: |
-| [![Build Status](https://travis-ci.com/ichatzinikolaidis/CasADi.jl.svg?token=FzSdC6SrVJguwZEzpBbQ&branch=main)](https://travis-ci.com/ichatzinikolaidis/CasADi.jl) | [![codecov](https://codecov.io/gh/ichatzinikolaidis/CasADi.jl/branch/main/graph/badge.svg?token=vdYN5Ok2BB)](https://codecov.io/gh/ichatzinikolaidis/CasADi.jl) |
+[![Join the chat at https://julialang.zulipchat.com #sciml-bridged](https://img.shields.io/static/v1?label=Zulip&message=chat&color=9558b2&labelColor=389826)](https://julialang.zulipchat.com/#narrow/stream/279055-sciml-bridged)
+[![ColPrac: Contributor's Guide on Collaborative Practices for Community Packages](https://img.shields.io/badge/ColPrac-Contributor%27s%20Guide-blueviolet)](https://github.com/SciML/ColPrac)
+[![SciML Code Style](https://img.shields.io/static/v1?label=code%20style&message=SciML&color=9558b2&labelColor=389826)](https://github.com/SciML/SciMLStyle)
 
 ## Introduction
 
@@ -15,15 +15,6 @@ Please note:
 1. This repo is unofficial, not maintained by the original CasADi authors, and not affiliated with the CasADi project.
 2. There is no plan to include interfaces to all of CasADi capabilities. It has grown out of my own research needs and I am sharing it in case other people find it useful. Since [PyCall.jl](https://github.com/JuliaPy/PyCall.jl) is used, any aspect of CasADi not implemented in this interface can be easily accessed directly via PyCall.
 3. I am more than happy to accept contributions and discuss potential changes that could improve this package.
-
-## How to install
-
-This is **not** a registered package and there is no plan to register it soon.
-You can easily install it by activating the package manager `]` and running
-
-```julia
-add git@github.com:ichatzinikolaidis/CasADi.jl.git
-```
 
 ## Example: Create NLP solver
 
@@ -50,11 +41,6 @@ println("Optimal solution: x = ", sol["x"].toarray()[1], ", y = ", sol["x"].toar
 ## Example: Using Opti stack
 
 We will use Opti stack to solve the example problem in CasADi's documentation
-
-<p align="center">
-<img src="https://latex.codecogs.com/svg.latex?\large&space;\begin{aligned}&space;\min_{x,y}&space;\&space;&&space;\&space;(y&space;-&space;x^2)^2&space;\\&space;s.t.&space;\&space;&&space;\&space;x^2&space;&plus;&space;y^2&space;=&space;1&space;\\&space;\&space;&&space;\&space;x&space;&plus;&space;y&space;\geq&space;1.&space;\end{aligned}" title="\large \begin{aligned} \min_{x,y} \ & \ (y - x^2)^2 \\ s.t. \ & \ x^2 + y^2 = 1 \\ \ & \ x + y \geq 1. \end{aligned}"/>
-</p>
-
 ```julia
 using CasADi
 
@@ -72,3 +58,7 @@ sol = opti.solve();
 
 println( "Optimal solution: x = ", sol.value(x), ", y = ", sol.value(y) )
 ```
+
+## Acknowledgments
+
+This package is built almost entirely off of code written by Iordanis Chatzinikolaidis. Many thanks to his implementation. The purpose of this package is to register it publicly.
