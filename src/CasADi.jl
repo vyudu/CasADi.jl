@@ -1,4 +1,3 @@
-__precompile__()
 module CasADi
 
 using PythonCall
@@ -25,10 +24,7 @@ const casadi = PythonCall.pynew()
 
 function __init__()
     ## Define casadi
-    PythonCallpycopy!(casadi, pyimport("casadi"))
-
-    pytype_mapping(casadi.SX, SX)
-    pytype_mapping(casadi.MX, MX)
+    PythonCall.pycopy!(casadi, pyimport("casadi"))
 end
 
 ## Add generic and new methods
