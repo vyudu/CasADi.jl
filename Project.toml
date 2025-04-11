@@ -10,6 +10,7 @@ PythonCall = "6099a3de-0909-46bc-b1f4-468b9a2dfc0d"
 [compat]
 PythonCall = "0.9.24"
 Suppressor = "0.2"
+julia = "1.6.1"
 
 [extras]
 Suppressor = "fd094767-a336-5f1f-9728-57cf17d0bbfb"
