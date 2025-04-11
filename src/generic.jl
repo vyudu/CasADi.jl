@@ -63,6 +63,7 @@ Base.zeros(::Type{C}, j1::Integer, j2::Integer) where {C<:CasadiSymbolicObject} 
     getproperty(casadi, Symbol(C)).zeros(j1, j2)
 
 ## Size related operations
+Base.size(x::CasadiSymbolicObject) = x.size()
 function Base.size(x::C, j::Integer) where {C<:CasadiSymbolicObject}
     if j == 1
         return getproperty(casadi, Symbol(C)).size1(x)
@@ -81,8 +82,11 @@ Base.vcat(x::Vector{T}) where {T<:CasadiSymbolicObject} = pycall(casadi.vcat, T,
 ## Matrix operations
 Base.adjoint(x::CasadiSymbolicObject) = transpose(x)
 Base.repeat(x::CasadiSymbolicObject, counts::Integer...) = casadi.repmat(x, counts...)
+Base.reshape(x::CasadiSymbolicObject, t::Tuple{Int,Int}) = pycall(casadi.reshape, T, x, t)
+Base.inv(x::CasadiSymbolicObject) = pycall(casadi.inv, T, x)
+Base.transpose(x::CasadiSymbolicObject) = pycall(casadi.transpose, T, x)
+Base.vec(x::CasadiSymbolicObject) = pycall(casadi.vec, T, x)
 
-## To/From array
 # From vector to SX/MX
 Base.convert(::Type{Τ}, V::AbstractVector{Τ}) where {Τ<:CasadiSymbolicObject} =
     casadi.vcat(V)

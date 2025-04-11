@@ -13,8 +13,7 @@ export casadi, to_julia, substitute
 include("types.jl")
 include("constructors.jl")
 include("numbers.jl")
-include("mathops.jl")
-include("mathfuns.jl")
+include("math.jl")
 include("generic.jl")
 include("utils.jl")
 
@@ -26,8 +25,5 @@ function __init__()
     ## Define casadi
     PythonCall.pycopy!(casadi, pyimport("casadi"))
 end
-
-## Add generic and new methods
-include("importexport.jl")
 
 end # module

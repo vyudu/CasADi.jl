@@ -26,3 +26,11 @@ end
 
 ## Linear algebra
 ×(x::C, y::Real) where {C<:CasadiSymbolicObject} = pycall(casadi.cross, C, x, y)
+
+# Trigonometry
+Base.sqrt(x::T) where {T <: CasadiSymbolicObject} = pycall(casadi.sqrt, T, x)
+Base.sin(x::T) where {T <: CasadiSymbolicObject} = pycall(casadi.sin, T, x)
+Base.cos(x::T) where {T <: CasadiSymbolicObject} = pycall(casadi.cos, T, x)
+Base.sincos(x::CasadiSymbolicObject) = (sin(x), cos(x))
+Base.sinc(x::CasadiSymbolicObject) = sin(x) / x
+Base.abs(x::T) where {T<:CasadiSymbolicObject} = pycall(casadi.fabs, T, x)
