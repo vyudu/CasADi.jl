@@ -1,60 +1,62 @@
 abstract type CasadiSymbolicObject <: Real end
 
 struct SX <: CasadiSymbolicObject
-    sym::Py
+    x::Py
 end
 
 struct MX <: CasadiSymbolicObject
-    sym::Py
+    x::Py
 end
 
-Base.convert(::Type{C}, x::Py) where {C<:CasadiSymbolicObject} = C(x)
+PythonCall.Py(x::MX) = x.x
+PythonCall.Py(x::SX) = x.x
+PythonCall.pyconvert(::Type{MX}, x::Py) = MX(x)
+PythonCall.pyconvert(::Type{SX}, x::Py) = SX(x)
 
 ## text/plain
-Base.show(io::IO, s::CasadiSymbolicObject) = print(io, pybuiltins.print(s))
 
 function Base.getproperty(o::C, s::Symbol) where {C<:CasadiSymbolicObject}
     if s in fieldnames(C)
         getfield(o, s)
     else
-        getproperty(pyconvert(o), s)
+        pyconvert(Any, getproperty(o.x, s))
     end
 end
 
-SX(x::T) where {T<:Number} = casadi.SX(x)
-SX(x::T) where {T<:AbstractVecOrMat{SX}} = convert(SX, x)
-SX(x::AbstractVecOrMat{T}) where {T<:AbstractFloat} = casadi.SX(x)
-SX(x::AbstractVecOrMat{T}) where {T<:Integer} = casadi.SX(x)
-SX(x::AbstractString) = casadi.SX.sym(x)
-SX(x::AbstractString, i1::Integer) = casadi.SX.sym(x, i1)
-SX(x::AbstractString, i1::Integer, i2::Integer) = casadi.SX.sym(x, i1, i2)
-SX(i1::Integer, i2::Integer) = casadi.SX(i1, i2)
+SX(x::T) where {T<:Number} = pyconvert(SX, casadi.SX(x))
+SX(x::AbstractVecOrMat{T}) where {T<:Number} = pyconvert(SX, casadi.SX(pyrowlist(x)))
+SX(x::AbstractVecOrMat{SX}) = convert(SX, x)
+SX(x::AbstractString) = pyconvert(SX, casadi.SX.sym(x))
+SX(x::AbstractString, i1::Integer) = pyconvert(SX, casadi.SX.sym(x, i1))
+SX(x::AbstractString, i1::Integer, i2::Integer) = pyconvert(SX, casadi.SX.sym(x, i1, i2))
+SX(i1::Integer, i2::Integer) = pyconvert(SX, casadi.SX(i1, i2))
 
-MX(x::T) where {T<:Number} = casadi.MX(x)
-MX(x::T) where {T<:AbstractVecOrMat{MX}} = convert(MX, x)
-MX(x::AbstractVecOrMat{T}) where {T<:AbstractFloat} = casadi.MX(x)
-MX(x::AbstractVecOrMat{T}) where {T<:Integer} = casadi.MX(x)
-MX(x::AbstractString) = casadi.MX.sym(x)
-MX(x::AbstractString, i1::Integer) = casadi.MX.sym(x, i1)
-MX(x::AbstractString, i1::Integer, i2::Integer) = casadi.MX.sym(x, i1, i2)
-MX(i1::Integer, i2::Integer) = casadi.MX(i1, i2)
+MX(x::T) where {T<:Number} = pyconvert(MX, casadi.MX(x))
+MX(x::AbstractVecOrMat{T}) where {T<:Number} = pyconvert(MX, casadi.MX(pyrowlist(x)))
+MX(x::AbstractVecOrMat{MX}) = convert(MX, x)
+MX(x::AbstractString) = pyconvert(MX, casadi.MX.sym(x))
+MX(x::AbstractString, i1::Integer) = pyconvert(MX, casadi.MX.sym(x, i1))
+MX(x::AbstractString, i1::Integer, i2::Integer) = pyconvert(MX, casadi.MX.sym(x, i1, i2))
+MX(i1::Integer, i2::Integer) = pyconvert(MX, casadi.MX(i1, i2))
 
 convert(::Type{C}, s::AbstractString) where {C<:CasadiSymbolicObject} = C(s)
 
 ## promote up to symbolic so that mathops work
 promote_rule(::Type{T}, ::Type{S}) where {T<:CasadiSymbolicObject,S<:Real} = T
-convert(::Type{Py}, s::CasadiSymbolicObject) = s.sym
+convert(::Type{Py}, s::CasadiSymbolicObject) = s.x
 
 """
 Convert a numeric CasADi value to a numeric Julia value.
 """
 function to_julia(x::CasadiSymbolicObject)
-    if size(x, 1) == 1 && size(x, 2) == 1
-        return casadi.evalf(x).toarray()[1]
+    vals = pyconvert(Vector, casadi.evalf(x).toarray())
+    if size(x) == (1, 1)
+        return pyconvert(Float64, vals[1][1])
+    elseif size(x, 2) == 1 || size(x, 1) == 1
+        return pyconvert(Vector{Float64}, reduce(vcat, vals))
+    else
+        vals = reduce(vcat, vals)
+        i, j = size(x)
+        vals = permutedims(reshape(vals, (j, i)))
     end
-    if size(x, 2) == 1
-        return casadi.evalf(x).toarray()[:]
-    end
-
-    return reshape(casadi.evalf(x).toarray(), size(x))
 end

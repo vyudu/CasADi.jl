@@ -17,9 +17,7 @@ include("array_utils.jl")
 ##################################################
 
 const casadi = PythonCall.pynew()
-
 function __init__()
-    ## Define casadi
     PythonCall.pycopy!(casadi, pyimport("casadi"))
 end
 

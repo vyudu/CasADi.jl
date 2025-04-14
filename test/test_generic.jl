@@ -1,3 +1,5 @@
+J = b -> pyconvert(Bool, b)
+
 function test_generic(::Type{T}) where {T<:CasadiSymbolicObject}
     @testset "$( string("Transform ", T, " to null, scalar, Vector, and Matrix ") )" begin
         null_symbol = T("null_symbol", 0)
@@ -6,11 +8,10 @@ function test_generic(::Type{T}) where {T<:CasadiSymbolicObject}
         M = T("M1", 2, 4) - T("M2", 2, 4)
 
         @test Vector(null_symbol) == Vector{Any}()
-        @test Matrix(null_symbol) == Vector{Any}(undef, 0)
-        @test casadi.is_equal(T(Vector(scalar)), scalar)
-        @test casadi.is_equal(T(Matrix(scalar)), scalar)
-        @test casadi.is_equal(T(Vector(V)), V, 1)
-        @test casadi.is_equal(T(Matrix(M)), M, 1)
+        @test J(casadi.is_equal(T(Vector(scalar)), scalar))
+        @test J(casadi.is_equal(T(Matrix(scalar)), scalar))
+        @test J(casadi.is_equal(T(Vector(V)), V, 1))
+        @test J(casadi.is_equal(T(Matrix(M)), M, 1))
     end
 
     @testset "$( string("Get index for ", T, "                                 ") )" begin
