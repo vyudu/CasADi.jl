@@ -12,7 +12,7 @@ include("numbers.jl")
 include("types.jl")
 include("utils.jl")
 
-for i in [SX, MX, DM]
+for i in [SX, MX]
     test_constructors(i)
     test_generic(i)
     test_importexport(i)

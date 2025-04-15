@@ -41,6 +41,7 @@ We will use Opti stack to solve the example problem in CasADi's documentation
 ```julia
 using CasADi
 
+opti = Opti()
 x = variable!(opti)
 y = variable!(opti)
 
