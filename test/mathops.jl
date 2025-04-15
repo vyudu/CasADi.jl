@@ -36,9 +36,9 @@ function test_mathops(::Type{T}) where {T<:CasadiSymbolicObject}
 
         n₁₂ = n₁ × n₂
         c₁₂ = c₁ × c₂
-        @test casadi.evalf(c₁₂).toarray()[:] == n₁₂
+        @test to_julia(c₁₂) == n₁₂
 
         c₁₂ = cross(c₁, c₂)
-        @test casadi.evalf(c₁₂).toarray()[:] == n₁₂
+        @test to_julia(c₁₂) == n₁₂
     end
 end

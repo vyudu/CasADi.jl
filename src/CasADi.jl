@@ -7,12 +7,16 @@ import Base: +, -, *, /, \, ^
 import Base: >, >=, <, <=, ==
 import LinearAlgebra: ×
 
-export CasadiSymbolicObject, SX, MX
+export CasadiSymbolicObject, SX, MX, DM
 export casadi, to_julia, substitute
+export nlpsol, qpsol, solve!, solve
+export Opti, variable!, subject_to!, minimize!, parameter!, set_initial!, set_value!, solver!, value
 
 include("types.jl")
 include("math.jl")
 include("array_utils.jl")
+include("opti.jl")
+include("solvers.jl")
 
 ##################################################
 

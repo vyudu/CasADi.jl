@@ -28,11 +28,11 @@ b = 100
 f = (α - x)^2 + b*(y - x^2)^2
 
 nlp = Dict("x" => vcat([x ; y]), "f" => f);
-S = casadi.nlpsol("S", "ipopt", nlp);
+S = nlpsol("S", "ipopt", nlp);
 
-sol = S(x0 = [0, 0]);
+sol = solve(S, x0 = [0, 0]);
 
-println("Optimal solution: x = ", sol["x"].toarray()[1], ", y = ", sol["x"].toarray()[2])
+println("Optimal solution: x = ", sol["x"][1], ", y = ", sol["x"][2])
 ```
 
 ## Example: Using Opti stack

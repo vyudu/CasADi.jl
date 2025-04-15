@@ -3,16 +3,16 @@ import LinearAlgebra: cross, ×, Symmetric
 import Suppressor: @capture_out
 using PythonCall
 
-include("test_constructors.jl")
-include("test_generic.jl")
-include("test_importexport.jl")
-include("test_mathfuns.jl")
-include("test_mathops.jl")
-include("test_numbers.jl")
-include("test_types.jl")
-include("test_utils.jl")
+include("constructors.jl")
+include("generic.jl")
+include("importexport.jl")
+include("mathfuns.jl")
+include("mathops.jl")
+include("numbers.jl")
+include("types.jl")
+include("utils.jl")
 
-for i in [SX, MX]
+for i in [SX, MX, DM]
     test_constructors(i)
     test_generic(i)
     test_importexport(i)
@@ -32,32 +32,30 @@ end
     f = (α - x)^2 + b * (y - x^2)^2
 
     nlp = Dict("x" => vcat([x; y]), "f" => f)
-    S = casadi.nlpsol(
+    S = nlpsol(
         "S",
         "ipopt",
         nlp,
-        Dict("ipopt" => Dict("print_level" => 0), "verbose" => false),
+        Dict("ipopt" => Dict(["print_level" => 0]), "verbose" => false),
     )
 
-    sol = S(x0 = [0, 0])
-
-    @test sol["x"].toarray()[1] ≈ 0.9999999999999899
-    @test sol["x"].toarray()[2] ≈ 0.9999999999999792
+    sol = solve(S, x0 = [0, 0])
+    @test sol["x"] ≈ [0.9999999999999899, 0.9999999999999792]
 end
 
 @testset "Test second example                               " begin
-    opti = casadi.Opti()
+    opti = Opti()
 
-    x = opti._variable()
-    y = opti._variable()
+    x = variable!(opti)
+    y = variable!(opti)
 
-    opti.minimize((y - x^2)^2)
-    opti._subject_to(x^2 + y^2 == 1)
-    opti._subject_to(x + y >= 1)
+    minimize!(opti, (y - x^2)^2)
+    subject_to!(opti, x^2 + y^2 == 1)
+    subject_to!(opti, x + y >= 1)
 
-    opti.solver("ipopt", Dict("verbose" => false), Dict("print_level" => 0))
-    sol = opti.solve()
+    solver!(opti, "ipopt", Dict("verbose" => false), Dict("print_level" => 0))
+    sol = solve(opti)
 
-    @test sol.value(x) ≈ 0.7861513776531158
-    @test sol.value(y) ≈ 0.6180339888825889
+    @test value(sol, x) ≈ 0.7861513776531158
+    @test value(sol, y) ≈ 0.6180339888825889
 end

@@ -1,5 +1,3 @@
-include("testpy.jl")
-
 J = b -> pyconvert(Bool, b)
 
 function test_constructors(::Type{T}) where {T<:CasadiSymbolicObject}
@@ -24,7 +22,7 @@ function test_constructors(::Type{T}) where {T<:CasadiSymbolicObject}
 
         m = eval(Meta.parse(string("casadi.", T, ".sym")))("m", 2, 4)
         M = T("M", 2, 4)
-        m_val = casadi.SX(pyrowlist(rand(2, 4)))
+        m_val = Py(rand(2, 4)).__array__()
         @test J(casadi.is_equal(casadi.substitute(m, m, m_val), casadi.substitute(M, M, m_val), 1))
     end
 

@@ -39,7 +39,7 @@ function test_generic(::Type{T}) where {T<:CasadiSymbolicObject}
         @test to_julia(V[2:4, 1]) ≈ v[2:4]
         @test to_julia(V[3, :]) ≈ v[3]
         @test to_julia(M[3, 5]) ≈ m[3, 5]
-        @test to_julia(M[3, 2:4]) ≈ m[3, 2:4]
+        @test to_julia(M[3, 2:4]) ≈ m[3, 2:4]'
         @test to_julia(M[1:3, :]) ≈ m[1:3, :]
     end
 
@@ -123,7 +123,7 @@ function test_generic(::Type{T}) where {T<:CasadiSymbolicObject}
         @test to_julia(V[:, end]) ≈ v
         @test to_julia(V[end, end]) ≈ v[end]
         @test to_julia(M[end]) ≈ m[end]
-        @test to_julia(M[end, :]) ≈ m[end, :]
+        @test to_julia(M[end, :]) ≈ m[end, :]'
         @test to_julia(M[:, end]) ≈ m[:, end]
         @test to_julia(M[end, end]) ≈ m[end]
     end

@@ -8,10 +8,15 @@ struct MX <: CasadiSymbolicObject
     x::Py
 end
 
-PythonCall.Py(x::MX) = x.x
-PythonCall.Py(x::SX) = x.x
-PythonCall.pyconvert(::Type{MX}, x::Py) = MX(x)
-PythonCall.pyconvert(::Type{SX}, x::Py) = SX(x)
+struct DM <: CasadiSymbolicObject
+    x::Py
+end
+
+PythonCall.Py(x::CasadiSymbolicObject) = x.x
+PythonCall.pyconvert(::Type{T}, x::Py) where {T <: CasadiSymbolicObject} = T(x)
+
+Base.show(io::IO, c::CasadiSymbolicObject) = print(io, pycall(pybuiltins.str, c.x))
+_tonparr(a::AbstractArray) = Py(a).__array__()
 
 ## text/plain
 
@@ -24,16 +29,24 @@ function Base.getproperty(o::C, s::Symbol) where {C<:CasadiSymbolicObject}
 end
 
 SX(x::T) where {T<:Number} = pyconvert(SX, casadi.SX(x))
-SX(x::AbstractVecOrMat{T}) where {T<:Number} = pyconvert(SX, casadi.SX(pyrowlist(x)))
 SX(x::AbstractVecOrMat{SX}) = convert(SX, x)
+SX(x::AbstractVecOrMat{T}) where {T<:Number} = pyconvert(SX, casadi.SX(_tonparr(x)))
 SX(x::AbstractString) = pyconvert(SX, casadi.SX.sym(x))
 SX(x::AbstractString, i1::Integer) = pyconvert(SX, casadi.SX.sym(x, i1))
 SX(x::AbstractString, i1::Integer, i2::Integer) = pyconvert(SX, casadi.SX.sym(x, i1, i2))
 SX(i1::Integer, i2::Integer) = pyconvert(SX, casadi.SX(i1, i2))
 
+DM(x::T) where {T<:Number} = pyconvert(DM, casadi.DM(x))
+DM(x::AbstractVecOrMat{DM}) = convert(DM, x)
+DM(x::AbstractVecOrMat{T}) where {T<:Number} = pyconvert(DM, casadi.DM(_tonparr(x)))
+DM(x::AbstractString) = pyconvert(DM, casadi.DM.sym(x))
+DM(x::AbstractString, i1::Integer) = pyconvert(DM, casadi.DM.sym(x, i1))
+DM(x::AbstractString, i1::Integer, i2::Integer) = pyconvert(DM, casadi.DM.sym(x, i1, i2))
+DM(i1::Integer, i2::Integer) = pyconvert(DM, casadi.DM(i1, i2))
+
 MX(x::T) where {T<:Number} = pyconvert(MX, casadi.MX(x))
-MX(x::AbstractVecOrMat{T}) where {T<:Number} = pyconvert(MX, casadi.MX(pyrowlist(x)))
 MX(x::AbstractVecOrMat{MX}) = convert(MX, x)
+MX(x::AbstractVecOrMat{T}) where {T<:Number} = pyconvert(MX, casadi.MX(_tonparr(x)))
 MX(x::AbstractString) = pyconvert(MX, casadi.MX.sym(x))
 MX(x::AbstractString, i1::Integer) = pyconvert(MX, casadi.MX.sym(x, i1))
 MX(x::AbstractString, i1::Integer, i2::Integer) = pyconvert(MX, casadi.MX.sym(x, i1, i2))
@@ -52,10 +65,10 @@ function to_julia(x::CasadiSymbolicObject)
     vals = pyconvert(Vector, casadi.evalf(x).toarray())
     if size(x) == (1, 1)
         return pyconvert(Float64, vals[1][1])
-    elseif size(x, 2) == 1 || size(x, 1) == 1
-        return pyconvert(Vector{Float64}, reduce(vcat, vals))
+    elseif size(x, 2) == 1
+        return pyconvert(Vector{Float64}, reduce(vcat, vals, init = zeros(0)))
     else
-        vals = reduce(vcat, vals)
+        vals = reduce(vcat, vals; init = zeros(0))
         i, j = size(x)
         vals = permutedims(reshape(vals, (j, i)))
     end
