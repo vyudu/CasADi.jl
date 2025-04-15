@@ -41,19 +41,17 @@ We will use Opti stack to solve the example problem in CasADi's documentation
 ```julia
 using CasADi
 
-opti = casadi.Opti();
+x = variable!(opti)
+y = variable!(opti)
 
-x = opti._variable()
-y = opti._variable()
+minimize!(opti, (y - x^2)^2)
+subject_to!(opti, x^2 + y^2 == 1)
+subject_to!(opti, x + y >= 1)
 
-opti.minimize( (y - x^2)^2 )
-opti._subject_to(x^2 + y^2 == 1)
-opti._subject_to(x + y >= 1)
+solver!(opti, "ipopt")
+sol = solve(opti)
 
-opti.solver("ipopt");
-sol = opti.solve();
-
-println( "Optimal solution: x = ", sol.value(x), ", y = ", sol.value(y) )
+println("Optimal solution: x = ", sol.value(x), ", y = ", sol.value(y))
 ```
 
 ## Acknowledgments
