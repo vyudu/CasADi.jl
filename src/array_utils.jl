@@ -102,3 +102,9 @@ end
 ## Solve linear systems
 Base.:\(A::Matrix{C}, b::Vector{C}) where {C<:CasadiSymbolicObject} =
     Vector(C(casadi.solve(C(A), C(b))))
+
+Base.:\(A::AbstractMatrix{C}, b::AbstractMatrix{N}) where {C<:CasadiSymbolicObject, N<:Number} =
+    Matrix(C(casadi.solve(C(A), C(b))))
+
+Base.:\(A::AbstractMatrix{N}, b::AbstractMatrix{C}) where {C<:CasadiSymbolicObject, N<:Number} =
+    Matrix(C(casadi.solve(C(A), C(b))))
