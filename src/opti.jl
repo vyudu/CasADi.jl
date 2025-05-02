@@ -49,3 +49,7 @@ end
 function value(sol::OptiSol, expr::MX) 
     pyconvert(Any, sol.py.value(expr))
 end
+
+function debug_value(opti::Opti, expr::MX)
+    pyconvert(Any, opti.debug.value(expr))
+end
