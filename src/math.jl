@@ -25,6 +25,9 @@ function *(x::C, y::Real) where {C<:CasadiSymbolicObject}
     C(v)
 end
 
+*(x::AbstractArray{<:Real}, y::C) where {C <: CasadiSymbolicObject} = C(x) * y
+*(x::C, y::AbstractArray{<:Real}) where {C <: CasadiSymbolicObject} = x * C(y)
+
 ## Comparisons - Julia semantics
 >=(x::C, y::Real) where {C<:CasadiSymbolicObject} = C(casadi.ge(x, y))
 >(x::C, y::Real) where {C<:CasadiSymbolicObject} = C(casadi.gt(x, y))

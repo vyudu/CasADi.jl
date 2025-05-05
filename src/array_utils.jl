@@ -77,12 +77,14 @@ Base.inv(x::T) where {T <: CasadiSymbolicObject} = T(casadi.inv(x))
 Base.vec(x::T) where {T <: CasadiSymbolicObject} = T(casadi.vec(x))
 
 # From vector to SX/MX
-Base.convert(::Type{Τ}, V::AbstractVector{Τ}) where {Τ<:CasadiSymbolicObject} =
-    casadi.vcat(pyrowlist(V))
+function Base.convert(::Type{T}, V::AbstractVector{T}) where {T <: CasadiSymbolicObject}
+    T(casadi.vcat(pyrowlist(V)))
+end
 
 # From matrix to SX/MX
-Base.convert(::Type{Τ}, M::AbstractMatrix{Τ}) where {Τ<:CasadiSymbolicObject} =
-    casadi.blockcat(pyrowlist(M))
+function Base.convert(::Type{T}, M::AbstractMatrix{T}) where {T <: CasadiSymbolicObject}
+    T(casadi.blockcat(pyrowlist(M)))
+end
 
 # Convert SX/MX to vector
 function Base.Vector(V::T) where {T <: CasadiSymbolicObject} 
@@ -108,3 +110,11 @@ Base.:\(A::AbstractMatrix{C}, b::AbstractMatrix{N}) where {C<:CasadiSymbolicObje
 
 Base.:\(A::AbstractMatrix{N}, b::AbstractMatrix{C}) where {C<:CasadiSymbolicObject, N<:Number} =
     Matrix(C(casadi.solve(C(A), C(b))))
+
+function SymbolicUtils.Code.create_array(::Type{T}, ::Nothing, ::Val{1}, ::Val{dims}, elems...) where {T, dims}
+    T([elems...])
+end
+
+function SymbolicUtils.Code.create_array(::Type{C}, T, ::Val{1}, ::Val{dims}, elems...) where {C, dims}
+    C(T[elems...])
+end
