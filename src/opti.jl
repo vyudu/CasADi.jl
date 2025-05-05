@@ -51,5 +51,31 @@ function value(sol::OptiSol, expr::MX)
 end
 
 function debug_value(opti::Opti, expr::MX)
-    pyconvert(Any, opti.debug.value(expr))
+    pyconvert(Any, opti.py.debug.value(expr))
+end
+
+function return_status(opti::Opti) 
+    pyconvert(String, opti.py.return_status())
+end
+
+function Base.copy(opti::Opti) 
+    Opti(opti.py.copy())
+end
+
+function Base.getproperty(opti::Opti, sym::Symbol)
+    if sym == :x
+        MX(getfield(opti, :py).x)
+    elseif sym == :p
+        MX(getfield(opti, :py).y)
+    elseif sym == :nx
+        pyconvert(Int, getfield(opti, :py).nx)
+    elseif sym == :np
+        pyconvert(Int, getfield(opti.py).np)
+    elseif sym == :ng
+        pyconvert(Int, getfield(opti.py).ng)
+    elseif sym == :py
+        gefield(opti, :py)
+    else
+        error("Cannot access field $sym of Opti object; please use the corresponding CasADi.jl API function (e.g. variable! instead of opti.variable). If something is missed here please open an issue.")
+    end
 end

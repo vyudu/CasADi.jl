@@ -1,6 +1,7 @@
 module CasADi
 
 using PythonCall
+using SymbolicUtils
 
 import Base: convert, getproperty, hcat, length, promote_rule, show, size, vcat
 import Base: +, -, *, /, \, ^
@@ -9,7 +10,7 @@ import LinearAlgebra: ×
 
 export CasadiSymbolicObject, SX, MX, DM
 export casadi, to_julia, substitute
-export nlpsol, qpsol, solve!, solve
+export nlpsol, qpsol, solve!
 export Opti, variable!, subject_to!, minimize!, parameter!, set_initial!, set_value!, solver!, value
 
 include("types.jl")

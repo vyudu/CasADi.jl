@@ -1,15 +1,17 @@
 name = "CasADi"
 uuid = "c49709b8-5c63-11e9-2fb2-69db5844192f"
 authors = ["Iordanis Chatzinikolaidis <ch.iordanis@outlook.com>", "Vincent Du <vincent.duyuan@gmail.com>"]
-version = "1.0.1"
+version = "1.0.2"
 
 [deps]
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 PythonCall = "6099a3de-0909-46bc-b1f4-468b9a2dfc0d"
+SymbolicUtils = "d1185830-fcd6-423d-90d6-eec64667417b"
 
 [compat]
 PythonCall = "0.9.24"
 Suppressor = "0.2"
+SymbolicUtils = "3.27.0"
 julia = "1.6.1"
 
 [extras]
