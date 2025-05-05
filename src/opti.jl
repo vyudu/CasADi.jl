@@ -74,7 +74,7 @@ function Base.getproperty(opti::Opti, sym::Symbol)
     elseif sym == :ng
         pyconvert(Int, getfield(opti.py).ng)
     elseif sym == :py
-        gefield(opti, :py)
+        getfield(opti, :py)
     else
         error("Cannot access field $sym of Opti object; please use the corresponding CasADi.jl API function (e.g. variable! instead of opti.variable). If something is missed here please open an issue.")
     end

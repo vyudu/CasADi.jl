@@ -13,7 +13,3 @@ function test_utils(::Type{T}) where {T<:CasadiSymbolicObject}
         @test to_julia(substitute(f, [y; z; x], [2; 0; -4])) == 0
     end
 end
-
-@testset "AbstractArray{MX} to MX conversions" begin
-
-end
