@@ -207,10 +207,10 @@ function test_generic(::Type{T}) where {T<:CasadiSymbolicObject}
 
     @testset "Array conversion tests" begin
         A = rand(3, 4)
-        B = T(4, 4)
+        B = SX(4, 4)
         C = Matrix(A * B)
         D = Matrix(B * A')
-        @test J(isequal(T(C), T(zeros(3,4))))
-        @test J(isequal(T(D), T(zeros(4,3))))
+        @test isequal(SX(C), SX(zeros(3,4)))
+        @test isequal(SX(D), SX(zeros(4,3)))
     end
 end

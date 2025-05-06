@@ -6,6 +6,10 @@ Base.cos(x::T) where {T<:CasadiSymbolicObject} = T(casadi.cos(x))
 Base.sincos(x::T) where {T <: CasadiSymbolicObject} = T(sin(x)), T(cos(x))
 Base.sinc(x::T) where {T <: CasadiSymbolicObject} = T(sin(x) / x)
 Base.abs(x::T) where {T<:CasadiSymbolicObject} = T(casadi.fabs(x))
+Base.exp(x::T) where {T<:CasadiSymbolicObject} = T(casadi.exp(x))
+Base.sum(x::T) where {T<:CasadiSymbolicObject} = T(casadi.sum(x))
+
+# NaNMath
 
 ## Binary operations
 +(x::C, y::Real) where {C<:CasadiSymbolicObject} = C(casadi.plus(x, y))
@@ -28,13 +32,14 @@ end
 *(x::AbstractArray{<:Real}, y::C) where {C <: CasadiSymbolicObject} = C(x) * y
 *(x::C, y::AbstractArray{<:Real}) where {C <: CasadiSymbolicObject} = x * C(y)
 
-## Comparisons - Julia semantics
 >=(x::C, y::Real) where {C<:CasadiSymbolicObject} = C(casadi.ge(x, y))
 >(x::C, y::Real) where {C<:CasadiSymbolicObject} = C(casadi.gt(x, y))
 <=(x::C, y::Real) where {C<:CasadiSymbolicObject} = C(casadi.le(x, y))
 <(x::C, y::Real) where {C<:CasadiSymbolicObject} = C(casadi.lt(x, y))
 ==(x::C, y::Real) where {C<:CasadiSymbolicObject} = C(casadi.eq(x, y))
+
 Base.isequal(x::C, y::C) where {C<:CasadiSymbolicObject} = pyconvert(Bool, casadi.is_equal(x,y))
+Base.iszero(x::C) where {C <: CasadiSymbolicObject} = pyconvert(Bool, x.x.is_zero())
 
 ## Symbolic substitution
 function substitute(ex::Union{C, AbstractVector{C}, AbstractMatrix{C}}, vars, vals)  where {C <: CasadiSymbolicObject}

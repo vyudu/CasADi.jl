@@ -41,17 +41,19 @@ function solver!(opti::Opti, solver::String, plugin_options::Dict = Dict(), solv
     opti.py.solver(solver, PyDict(plugin_options), PyDict(solver_options))
 end
 
-function solve(opti::Opti) 
+function solve!(opti::Opti) 
     psol = opti.py.solve()
     OptiSol(psol)
 end
 
 function value(sol::OptiSol, expr::MX) 
-    pyconvert(Any, sol.py.value(expr))
+    vals = pyconvert(Any, sol.py.value(expr))
+    to_julia(MX(vals))
 end
 
 function debug_value(opti::Opti, expr::MX)
-    pyconvert(Any, opti.py.debug.value(expr))
+    vals = pyconvert(Any, opti.py.debug.value(expr))
+    to_julia(MX(vals))
 end
 
 function return_status(opti::Opti) 
@@ -74,7 +76,7 @@ function Base.getproperty(opti::Opti, sym::Symbol)
     elseif sym == :ng
         pyconvert(Int, getfield(opti.py).ng)
     elseif sym == :py
-        gefield(opti, :py)
+        getfield(opti, :py)
     else
         error("Cannot access field $sym of Opti object; please use the corresponding CasADi.jl API function (e.g. variable! instead of opti.variable). If something is missed here please open an issue.")
     end

@@ -39,7 +39,7 @@ end
         Dict("ipopt" => Dict(["print_level" => 0]), "verbose" => false),
     )
 
-    sol = solve(S, x0 = [0, 0])
+    sol = solve!(S, x0 = [0, 0])
     @test sol["x"] ≈ [0.9999999999999899, 0.9999999999999792]
 end
 
@@ -54,7 +54,7 @@ end
     subject_to!(opti, x + y >= 1)
 
     solver!(opti, "ipopt", Dict("verbose" => false), Dict("print_level" => 0))
-    sol = solve(opti)
+    sol = solve!(opti)
 
     @test value(sol, x) ≈ 0.7861513776531158
     @test value(sol, y) ≈ 0.6180339888825889
