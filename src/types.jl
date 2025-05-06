@@ -60,13 +60,16 @@ Convert a numeric CasADi value to a numeric Julia value.
 """
 function to_julia(x::CasadiSymbolicObject)
     vals = pyconvert(Vector, casadi.evalf(x).toarray())
+    vals = reduce(vcat, vals; init = zeros(0))
+
     if size(x) == (1, 1)
         return pyconvert(Float64, vals[1][1])
     elseif size(x, 2) == 1
-        return pyconvert(Vector{Float64}, reduce(vcat, vals, init = zeros(0)))
+        return pyconvert(Vector{Float64}, vals)
     else
-        vals = reduce(vcat, vals; init = zeros(0))
         i, j = size(x)
         vals = permutedims(reshape(vals, (j, i)))
     end
 end
+
+Base.hash(C::CasadiSymbolicObject, x::UInt) = hash(C.x, x)

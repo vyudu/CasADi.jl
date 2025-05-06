@@ -41,17 +41,19 @@ function solver!(opti::Opti, solver::String, plugin_options::Dict = Dict(), solv
     opti.py.solver(solver, PyDict(plugin_options), PyDict(solver_options))
 end
 
-function solve(opti::Opti) 
+function solve!(opti::Opti) 
     psol = opti.py.solve()
     OptiSol(psol)
 end
 
 function value(sol::OptiSol, expr::MX) 
-    pyconvert(Any, sol.py.value(expr))
+    vals = pyconvert(Any, sol.py.value(expr))
+    to_julia(MX(vals))
 end
 
 function debug_value(opti::Opti, expr::MX)
-    pyconvert(Any, opti.py.debug.value(expr))
+    vals = pyconvert(Any, opti.py.debug.value(expr))
+    to_julia(MX(vals))
 end
 
 function return_status(opti::Opti) 
