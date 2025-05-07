@@ -12,6 +12,10 @@ function test_generic(::Type{T}) where {T<:CasadiSymbolicObject}
         @test J(casadi.is_equal(T(Matrix(scalar)), scalar))
         @test J(casadi.is_equal(T(Vector(V)), V, 1))
         @test J(casadi.is_equal(T(Matrix(M)), M, 1))
+        @test size(V, 1) == 3
+        @test size(V, 2) == 1
+        @test size(M, 1) == 2
+        @test size(M, 2) == 4
     end
 
     @testset "$( string("Get index for ", T, "                                 ") )" begin

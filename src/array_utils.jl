@@ -55,9 +55,9 @@ Base.size(x::CasadiSymbolicObject) = pyconvert(Tuple, x.size())
 
 function Base.size(x::C, j::Integer) where {C<:CasadiSymbolicObject}
     if j == 1
-        return pyconvert(Int, getproperty(casadi, Symbol(C)).size1(x))
+        return pyconvert(Int, x.x.size1())
     elseif j == 2
-        return pyconvert(Int, getproperty(casadi, Symbol(C)).size2(x))
+        return pyconvert(Int, x.x.size2())
     else
         throw(DimensionMismatch("arraysize: dimension out of range"))
     end

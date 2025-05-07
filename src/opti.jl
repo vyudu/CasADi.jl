@@ -38,6 +38,7 @@ function solver!(opti::Opti, solver::String, plugin_options::Dict = Dict(), solv
     for (k, v) in solver_options
         v isa Dict && (solver_options[k] = PyDict(v))
     end
+    @show solver_options
     opti.py.solver(solver, PyDict(plugin_options), PyDict(solver_options))
 end
 
