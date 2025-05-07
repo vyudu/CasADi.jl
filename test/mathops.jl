@@ -47,5 +47,7 @@ function test_mathops(::Type{T}) where {T<:CasadiSymbolicObject}
         @test isequal(sum(a), T(10))
         b = T(3,3)
         @test isequal(sum(b), T(0))
+        @test isequal(sum(b, dims = 1), T([0,0,0]'))
+        @test isequal(sum(b, dims = 2), T([0,0,0]))
     end
 end
