@@ -7,7 +7,18 @@ Base.sincos(x::T) where {T <: CasadiSymbolicObject} = T(sin(x)), T(cos(x))
 Base.sinc(x::T) where {T <: CasadiSymbolicObject} = T(sin(x) / x)
 Base.abs(x::T) where {T<:CasadiSymbolicObject} = T(casadi.fabs(x))
 Base.exp(x::T) where {T<:CasadiSymbolicObject} = T(casadi.exp(x))
-Base.sum(x::T) where {T<:CasadiSymbolicObject} = T(casadi.sum(x))
+
+function Base.sum(x::T; dims=:) where {T <: CasadiSymbolicObject}
+    if dims == 1
+        T(casadi.sum1(x))
+    elseif dims == 2
+        T(casadi.sum2(x))
+    elseif dims == (:)
+        T(casadi.sum(x))
+    else
+        error("invalid dims for sum.")
+    end
+end
 
 # NaNMath
 
