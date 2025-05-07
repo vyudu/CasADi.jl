@@ -41,4 +41,11 @@ function test_mathops(::Type{T}) where {T<:CasadiSymbolicObject}
         c₁₂ = cross(c₁, c₂)
         @test to_julia(c₁₂) == n₁₂
     end
+
+    @testset "Sum" begin
+        a = T([1,2,3,4])
+        @test isequal(sum(a), T(10))
+        b = T(3,3)
+        @test isequal(sum(b), T(0))
+    end
 end
