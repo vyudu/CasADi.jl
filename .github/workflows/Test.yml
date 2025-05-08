@@ -3,12 +3,12 @@ name: "Tests"
 on:
   pull_request:
     branches:
-      - master
+      - main
     paths-ignore:
       - 'docs/**'
   push:
     branches:
-      - master
+      - maain
     paths-ignore:
       - 'docs/**'
       
@@ -16,7 +16,7 @@ concurrency:
   # Skip intermediate builds: always, but for the master branch.
   # Cancel intermediate builds: always, but for the master branch.
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
   tests:
