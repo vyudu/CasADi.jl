@@ -8,7 +8,7 @@ on:
       - 'docs/**'
   push:
     branches:
-      - maain
+      - main
     paths-ignore:
       - 'docs/**'
       
