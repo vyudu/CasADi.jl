@@ -39,7 +39,7 @@ end
         Dict("ipopt" => Dict(["print_level" => 0]), "verbose" => false),
     )
 
-    sol = solve!(S, x0 = [0, 0])
+    sol = solve(S, x0 = [0, 0])
     @test sol["x"] ≈ [0.9999999999999899, 0.9999999999999792]
 end
 

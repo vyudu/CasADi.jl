@@ -1,4 +1,4 @@
 channels = ["conda-forge"]
 
 [deps]
-casadi = ">3.6"
+casadi = ">=3.7"
