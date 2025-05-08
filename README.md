@@ -50,7 +50,7 @@ subject_to!(opti, x^2 + y^2 == 1)
 subject_to!(opti, x + y >= 1)
 
 solver!(opti, "ipopt")
-sol = solve(opti)
+sol = solve!(opti)
 
 println("Optimal solution: x = ", sol.value(x), ", y = ", sol.value(y))
 ```
