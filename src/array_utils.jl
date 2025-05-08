@@ -55,14 +55,14 @@ Base.size(x::CasadiSymbolicObject) = pyconvert(Tuple, x.size())
 
 function Base.size(x::C, j::Integer) where {C<:CasadiSymbolicObject}
     if j == 1
-        return pyconvert(Int, x.x.size1())
+        return pyconvert(Int, x.size1())
     elseif j == 2
-        return pyconvert(Int, x.x.size2())
+        return pyconvert(Int, x.size2())
     else
         throw(DimensionMismatch("arraysize: dimension out of range"))
     end
 end
-Base.length(x::C) where {C<:CasadiSymbolicObject} = pyconvert(Int, getproperty(casadi, Symbol(C)).numel(x))
+Base.length(x::C) where {C<:CasadiSymbolicObject} = pyconvert(Int, x.numel())
 
 ## Concatenations
 Base.hcat(x::Vector{T}) where {T<:CasadiSymbolicObject} = T(casadi.hcat(x))

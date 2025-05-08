@@ -44,10 +44,10 @@ function test_mathops(::Type{T}) where {T<:CasadiSymbolicObject}
 
     @testset "Sum" begin
         a = T([1,2,3,4])
-        @test isequal(sum(a), T(10))
+        @test isequal(to_julia(sum(a)), 10)
         b = T(3,3)
-        @test isequal(sum(b), T(0))
-        @test isequal(sum(b, dims = 1), T([0,0,0]'))
-        @test isequal(sum(b, dims = 2), T([0,0,0]))
+        @test isequal(to_julia(sum(b)), 0)
+        @test isequal(to_julia(sum(b, dims = 1)), [0,0,0]')
+        @test isequal(to_julia(sum(b, dims = 2)), [0,0,0])
     end
 end
