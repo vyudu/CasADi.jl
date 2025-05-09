@@ -111,10 +111,10 @@ Base.:\(A::AbstractMatrix{C}, b::AbstractMatrix{N}) where {C<:CasadiSymbolicObje
 Base.:\(A::AbstractMatrix{N}, b::AbstractMatrix{C}) where {C<:CasadiSymbolicObject, N<:Number} =
     Matrix(C(casadi.solve(C(A), C(b))))
 
-function SymbolicUtils.Code.create_array(::Type{T}, ::Nothing, ::Val{1}, ::Val{dims}, elems...) where {T, dims}
+function SymbolicUtils.Code.create_array(::Type{T}, ::Nothing, ::Val{1}, ::Val{dims}, elems...) where {T <: CasadiSymbolicObject, dims}
     T([elems...])
 end
 
-function SymbolicUtils.Code.create_array(::Type{C}, T, ::Val{1}, ::Val{dims}, elems...) where {C, dims}
+function SymbolicUtils.Code.create_array(::Type{C}, T, ::Val{1}, ::Val{dims}, elems...) where {C <: CasadiSymbolicObject, dims}
     C(T[elems...])
 end
